@@ -2,7 +2,7 @@ const { app, BrowserWindow, Tray, Menu, ipcMain, dialog } = require('electron');
 const path = require('path');
 const AutoLaunch = require('electron-auto-launch');
 const { startServer, stopServer } = require(path.join(__dirname, 'src', 'server', 'server.js'));
-const { exec } = require('child_process');
+// const { exec } = require('child_process');
 
 let mainWindow;
 let tray = null;
@@ -97,20 +97,20 @@ app.whenReady().then(() => {
     }
   });
 
-  // Викликаємо PowerShell для отримання принтерів (Windows only)
-  ipcMain.handle('get-printers', async () => {
-    return new Promise((resolve, reject) => {
-      exec('powershell -Command "Get-Printer | Select-Object -ExpandProperty Name"', (error, stdout, stderr) => {
-        if (error) {
-          console.error('Error fetching printers:', stderr);
-          resolve([]); // Якщо помилка, повертаємо порожній масив
-        } else {
-          const printers = stdout.trim().split('\n').map(printer => printer.trim());
-          resolve(printers);
-        }
-      });
-    });
-  });
+  // // Викликаємо PowerShell для отримання принтерів (Windows only)
+  // ipcMain.handle('get-printers', async () => {
+  //   return new Promise((resolve, reject) => {
+  //     exec('powershell -Command "Get-Printer | Select-Object -ExpandProperty Name"', (error, stdout, stderr) => {
+  //       if (error) {
+  //         console.error('Error fetching printers:', stderr);
+  //         resolve([]); // Якщо помилка, повертаємо порожній масив
+  //       } else {
+  //         const printers = stdout.trim().split('\n').map(printer => printer.trim());
+  //         resolve(printers);
+  //       }
+  //     });
+  //   });
+  // });
 });
 
 // Закриваємо застосунок повністю

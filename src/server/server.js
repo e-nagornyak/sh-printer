@@ -130,6 +130,27 @@ const startServer = () => {
     res.sendFile(path.join(__dirname, 'front', 'index.html'));
   });
 
+  app.get('/printers', (req, res) => {
+    exec('powershell -Command "Get-Printer | Select-Object -ExpandProperty Name"', (error, stdout, stderr) => {
+      if (error) {
+        console.error('Error fetching printers:', stderr);
+        return res.status(500).json({ error: 'Error fetching printers' });
+      }
+
+      // Parse the printer names from stdout
+      const printers = stdout.trim().split('\n').map(printer => printer.trim());
+      res.json({ printers });
+    });
+  });
+
+  // Endpoint to fetch printers using PowerShell
+  app.get('/printers2', async (req, res) => {
+    const printersList = await printer?.getPrinters()
+    const getDefaultPrinter = await printer?.getDefaultPrinter()
+
+    res.json({ printers: printersList, defaultPrinter: getDefaultPrinter });
+  });
+
   // Start the server
   server = app.listen(PORT, () => {
     console.log(`Express server running at http://localhost:${PORT}`);
