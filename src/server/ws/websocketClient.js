@@ -5,7 +5,7 @@ const printer = require('pdf-to-printer');
 const path = require('path');
 const { app: electronApp } = require('electron');
 const config = require('../config.json');
-const logger = require('../logs/logger');
+const logger = require('../logger/logger');
 
 const RECONNECT_INTERVAL = 5000;
 let ws;

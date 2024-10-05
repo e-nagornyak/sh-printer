@@ -1,7 +1,7 @@
 const { app } = require('./app');
 const config = require('./config.json');
 const { startWebSocketClient, stopWebSocketClient } = require('./ws/websocketClient');
-const logger = require('./logs/logger');
+const logger = require('./logger/logger');
 
 let server;
 const PORT = config.app.PORT;

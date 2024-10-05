@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const router = express.Router();
-const logDirectory = path.join(__dirname, '..', 'logs', 'logs'); // Директорія з логами
+const logDirectory = path.join(__dirname, '..', 'logger', 'logs'); // Директорія з логами
 
 // Функція для знаходження останнього лог-файлу
 const getLatestLogFile = () => {
