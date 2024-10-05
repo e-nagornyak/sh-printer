@@ -1,17 +1,18 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, Tray, Menu, ipcMain } = require('electron');
 const path = require('path');
 const AutoLaunch = require('electron-auto-launch');
-
-// Імпортуємо функції для запуску та зупинки сервера
 const { startServer, stopServer } = require(path.join(__dirname, 'src', 'server', 'server.js'));
-const { exec } = require("child_process");
+const { exec } = require('child_process');
 
 let mainWindow;
+let tray = null;
 
 // Налаштування автозапуску
 const autoLauncher = new AutoLaunch({
   name: 'My Printer App',
-  path: app.getPath('exe'), // Шлях до виконуваного файлу додатка
+  path: app.getPath('exe'), // Шлях до виконуваного файлу додатка,
+  mac: false,
+  isHidden: true
 });
 
 // Увімкнення автозапуску при запуску програми
@@ -23,7 +24,7 @@ autoLauncher.isEnabled().then((isEnabled) => {
   console.error('Error during auto-launch setup:', err);
 });
 
-app.on('ready', () => {
+app.whenReady().then(() => {
   // Запускаємо Express сервер тільки після того, як Electron готовий
   startServer();
 
@@ -33,16 +34,54 @@ app.on('ready', () => {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      enableRemoteModule: true
+      enableRemoteModule: true,
     },
+    icon: path.join(__dirname, 'icon.jpg') // Specify the path to your icon here
   });
 
   // Завантажуємо головну сторінку (index.html)
   const startUrl = path.join(__dirname, 'src', 'front', 'index.html');
   mainWindow.loadURL(`file://${startUrl}`);
 
-  mainWindow.on('closed', function () {
-    mainWindow = null;
+  // Створюємо іконку трею
+  tray = new Tray(path.join(__dirname, 'icon.jpg'));
+
+  // Додаємо контекстне меню до іконки трею
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Відкрити',
+      click: () => {
+        mainWindow.show();
+      },
+    },
+    {
+      label: 'Вихід',
+      click: () => {
+        app.quit();
+      },
+    },
+  ]);
+
+  tray.setToolTip('My Printer App');
+  tray.setContextMenu(contextMenu);
+
+  // Відображаємо вікно при кліку на іконку трею
+  tray.on('click', () => {
+    mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
+  });
+
+  // Ховаємо вікно при згортанні
+  mainWindow.on('minimize', (event) => {
+    event.preventDefault();
+    mainWindow.hide();
+  });
+
+  // Перехоплюємо подію закриття вікна і просто ховаємо його замість завершення
+  mainWindow.on('close', (event) => {
+    if (!app.isQuitting) {
+      event.preventDefault();
+      mainWindow.hide();
+    }
   });
 
   // Викликаємо PowerShell для отримання принтерів (Windows only)
@@ -61,6 +100,12 @@ app.on('ready', () => {
   });
 });
 
+// Закриваємо застосунок повністю
+app.on('before-quit', () => {
+  app.isQuitting = true;
+});
+
+// Подія для закриття вікон додатка
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
     app.quit();
