@@ -6,6 +6,7 @@ const { exec } = require('child_process');
 
 let mainWindow;
 let tray = null;
+app.isQuitting = false; // Global flag to handle quitting
 
 // Налаштування автозапуску
 const autoLauncher = new AutoLaunch({
@@ -57,7 +58,19 @@ app.whenReady().then(() => {
     {
       label: 'Вихід',
       click: () => {
-        app.quit();
+        // Show confirmation dialog when quitting from the context menu
+        const choice = dialog.showMessageBoxSync(mainWindow, {
+          type: 'question',
+          buttons: ['Вийти', 'Скасувати'],
+          defaultId: 1,
+          title: 'Підтвердження закриття',
+          message: 'Ви впевнені, що хочете вийти?',
+        });
+
+        if (choice === 0) { // If "Вийти" (Quit) is selected
+          app.isQuitting = true; // Set flag to true to allow quitting
+          app.quit(); // Quit the app
+        }
       },
     },
   ]);
@@ -76,24 +89,11 @@ app.whenReady().then(() => {
     mainWindow.hide();
   });
 
-  // Перехоплюємо подію закриття вікна і показуємо модальне вікно підтвердження закриття
+  // Перехоплюємо подію закриття вікна і просто ховаємо його замість завершення
   mainWindow.on('close', (event) => {
     if (!app.isQuitting) {
       event.preventDefault();
-
-      const choice = dialog.showMessageBoxSync(mainWindow, {
-        type: 'question',
-        buttons: ['Вийти', 'Скасувати'],
-        defaultId: 1,
-        title: 'Підтвердження закриття',
-        message: 'Ви впевнені, що хочете вийти?',
-      });
-
-      if (choice === 0) {
-        // Якщо користувач вибрав "Вийти", дозволяємо закриття вікна
-        app.isQuitting = true;
-        app.quit();
-      }
+      mainWindow.hide();
     }
   });
 
