@@ -36,11 +36,11 @@ app.whenReady().then(() => {
       nodeIntegration: true,
       contextIsolation: false,
       enableRemoteModule: true,
-
+      devTools: true
     },
     icon: path.join(__dirname, 'icon.jpg'), // Specify the path to your icon here
-    autoHideMenuBar: true, // Ця опція приховує верхню панель
-    frame: true, // Це залишить рамку вікна (кнопки мінімізації/закриття)
+    // autoHideMenuBar: true, // Ця опція приховує верхню панель
+    // frame: true, // Це залишить рамку вікна (кнопки мінімізації/закриття)
   });
 
   // Завантажуємо головну сторінку (index.html)
