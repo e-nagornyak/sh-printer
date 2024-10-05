@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, Menu, ipcMain } = require('electron');
+const { app, BrowserWindow, Tray, Menu, ipcMain, dialog } = require('electron');
 const path = require('path');
 const AutoLaunch = require('electron-auto-launch');
 const { startServer, stopServer } = require(path.join(__dirname, 'src', 'server', 'server.js'));
@@ -76,11 +76,24 @@ app.whenReady().then(() => {
     mainWindow.hide();
   });
 
-  // Перехоплюємо подію закриття вікна і просто ховаємо його замість завершення
+  // Перехоплюємо подію закриття вікна і показуємо модальне вікно підтвердження закриття
   mainWindow.on('close', (event) => {
     if (!app.isQuitting) {
       event.preventDefault();
-      mainWindow.hide();
+
+      const choice = dialog.showMessageBoxSync(mainWindow, {
+        type: 'question',
+        buttons: ['Вийти', 'Скасувати'],
+        defaultId: 1,
+        title: 'Підтвердження закриття',
+        message: 'Ви впевнені, що хочете вийти?',
+      });
+
+      if (choice === 0) {
+        // Якщо користувач вибрав "Вийти", дозволяємо закриття вікна
+        app.isQuitting = true;
+        app.quit();
+      }
     }
   });
 
