@@ -37,6 +37,7 @@ app.whenReady().then(() => {
       nodeIntegration: true,
       contextIsolation: false,
       enableRemoteModule: true,
+      webSecurity:false,
       devTools: true
     },
     icon: path.join(__dirname, 'icon.jpg'), // Specify the path to your icon here
