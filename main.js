@@ -37,7 +37,9 @@ app.whenReady().then(() => {
       contextIsolation: false,
       enableRemoteModule: true,
     },
-    icon: path.join(__dirname, 'icon.jpg') // Specify the path to your icon here
+    icon: path.join(__dirname, 'icon.jpg'), // Specify the path to your icon here
+    autoHideMenuBar: true, // Ця опція приховує верхню панель
+    frame: true, // Це залишить рамку вікна (кнопки мінімізації/закриття)
   });
 
   // Завантажуємо головну сторінку (index.html)
@@ -50,24 +52,24 @@ app.whenReady().then(() => {
   // Додаємо контекстне меню до іконки трею
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: 'Відкрити',
+      label: 'Open',
       click: () => {
         mainWindow.show();
       },
     },
     {
-      label: 'Вихід',
+      label: 'Exit',
       click: () => {
         // Show confirmation dialog when quitting from the context menu
         const choice = dialog.showMessageBoxSync(mainWindow, {
           type: 'question',
-          buttons: ['Вийти', 'Скасувати'],
+          buttons: ['Quit', 'Cancel'],
           defaultId: 1,
-          title: 'Підтвердження закриття',
-          message: 'Ви впевнені, що хочете вийти?',
+          title: 'Confirmation of closing',
+          message: 'Are you sure you want to quit?',
         });
 
-        if (choice === 0) { // If "Вийти" (Quit) is selected
+        if (choice === 0) { // If "Quit" is selected
           app.isQuitting = true; // Set flag to true to allow quitting
           app.quit(); // Quit the app
         }
