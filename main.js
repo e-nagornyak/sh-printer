@@ -44,10 +44,9 @@ app.whenReady().then(() => {
     // frame: true, // Це залишить рамку вікна (кнопки мінімізації/закриття)
   });
 
-  // Завантажуємо головну сторінку (index.html)
-  const startURL = true
-    ? 'http://localhost:3000'  // URL Vite dev server
-    : `file://${path.join(__dirname, 'dist', 'index.html')}`; // у продакшні білд
+  const startURL = process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3000'  // Vite dev server
+    : `file://${path.join(__dirname, 'dist', 'index.html')}`; // Для продакшн білду
 
   mainWindow.loadURL(startURL);
 

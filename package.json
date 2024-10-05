@@ -5,15 +5,19 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "dev": "vite",
-    "build": "electron-builder --win --x64",
+    "dev": "concurrently \"npm:dev:electron\" \"npm:dev:vite\"",
+    "dev:vite": "vite",
+    "dev:electron": "wait-on http://localhost:3000 && electron .",
+    "build": "vite build && electron-builder --win --x64",
     "postinstall": "electron-builder install-app-deps"
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.2",
+    "concurrently": "^9.0.1",
     "electron": "^32.1.2",
     "electron-builder": "^25.0.5",
-    "@vitejs/plugin-react": "^4.3.2",
-    "vite": "^5.4.8"
+    "vite": "^5.4.8",
+    "wait-on": "^8.0.1"
   },
   "dependencies": {
     "axios": "^1.7.7",
@@ -21,11 +25,11 @@
     "electron-is-dev": "^3.0.1",
     "express": "^4.21.0",
     "pdf-to-printer": "^5.6.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "winston": "^3.15.0",
     "winston-daily-rotate-file": "^5.0.0",
-    "ws": "^8.18.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "ws": "^8.18.0"
   },
   "build": {
     "appId": "com.example.printerapp",
