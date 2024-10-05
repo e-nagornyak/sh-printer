@@ -1,0 +1,54 @@
+{
+  "name": "electron-react-printer-app",
+  "version": "1.0.0",
+  "description": "A desktop printer app with Electron and React",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win --x64",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "devDependencies": {
+    "electron": "^32.1.2",
+    "electron-builder": "^25.0.5"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "electron-auto-launch": "^5.0.7",
+    "electron-is-dev": "^3.0.1",
+    "express": "^4.21.0",
+    "pdf-to-printer": "^5.6.0",
+    "ws": "^8.18.0"
+  },
+  "build": {
+    "appId": "com.example.printerapp",
+    "productName": "Printer App",
+    "icon": "build/icons/icon",
+    "files": [
+      "src/**/*",
+      "main.js",
+      "node_modules/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "src/server",
+        "to": "server",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "mac": {
+      "target": "dmg",
+      "icon": "build/icons/icon.icns"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "build/icons/icon.ico"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "build/icons"
+    }
+  }
+}
