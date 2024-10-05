@@ -5,8 +5,9 @@ const printer = require('pdf-to-printer');
 const path = require('path');
 const { app: electronApp } = require('electron');
 const config = require('../config.json');
+const logger = require('../logs/logger');
 
-const RECONNECT_INTERVAL = config.app.RECONNECT_INTERVAL;
+const RECONNECT_INTERVAL = 5000;
 let ws;
 
 const isDev = false;
@@ -38,19 +39,19 @@ const startWebSocketClient = () => {
   ws = new WebSocket('ws://37.27.179.208:8765');
 
   ws.onopen = () => {
-    console.log('Connected to WebSocket!');
+    logger.info('Connected to WebSocket!');
     ws.send('СлаваУкраине!');
   };
 
   ws.onmessage = async (event) => {
-    console.log('Received a message from the server: ' + event.data);
+    logger.info('Received a message from the server: ' + event.data);
 
     if (event.data.includes('.pdf')) {
       const pdfUrl = event.data;
 
       try {
         await downloadFile(pdfUrl, filePath);
-       console.log(`File downloaded successfully: ${filePath}`);
+        logger.info(`File downloaded successfully: ${filePath}`);
 
         const options = {
           printer: config.user.printerName,
@@ -58,26 +59,26 @@ const startWebSocketClient = () => {
           paperSize: '6',
         };
         await printer.print(filePath, options);
-        console.log('The file was successfully sent for printing.');
+        logger.info('The file was successfully sent for printing.');
 
         setTimeout(() => {
           fs.unlinkSync(filePath);
-        console.log('Temporary file deleted.');
+          logger.info('Temporary file deleted.');
         }, 500);
 
       } catch (error) {
-      console.error(`Error processing file: ${error.message}`);
+        logger.error(`Error processing file: ${error.message}`);
       }
     }
   };
 
   ws.onclose = () => {
-    console.log('WebSocket closed. Trying to connect in 5 seconds...');
+    logger.warn('WebSocket closed. Trying to connect in 5 seconds...');
     setTimeout(startWebSocketClient, RECONNECT_INTERVAL);
   };
 
   ws.onerror = (error) => {
-    console.log('Error: ' + error.message);
+    logger.error('Error: ' + error.message);
     ws.close(1000, 'Normal closure');
   };
 };

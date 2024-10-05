@@ -1,6 +1,7 @@
 const { app } = require('./app');
 const config = require('./config.json');
 const { startWebSocketClient, stopWebSocketClient } = require('./ws/websocketClient');
+const logger = require('./logs/logger');
 
 let server;
 const PORT = config.app.PORT;
@@ -16,7 +17,7 @@ const startServer = () => {
 const stopServer = () => {
   if (server) {
     server.close(() => {
-      console.log('Сервер Express зупинено.');
+      logger.info('Express server stopped.');
     });
   }
 
