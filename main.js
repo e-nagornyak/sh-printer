@@ -96,21 +96,6 @@ app.whenReady().then(() => {
       mainWindow.hide();
     }
   });
-
-  // // Викликаємо PowerShell для отримання принтерів (Windows only)
-  // ipcMain.handle('get-printers', async () => {
-  //   return new Promise((resolve, reject) => {
-  //     exec('powershell -Command "Get-Printer | Select-Object -ExpandProperty Name"', (error, stdout, stderr) => {
-  //       if (error) {
-  //         console.error('Error fetching printers:', stderr);
-  //         resolve([]); // Якщо помилка, повертаємо порожній масив
-  //       } else {
-  //         const printers = stdout.trim().split('\n').map(printer => printer.trim());
-  //         resolve(printers);
-  //       }
-  //     });
-  //   });
-  // });
 });
 
 // Закриваємо застосунок повністю
