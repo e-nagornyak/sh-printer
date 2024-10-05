@@ -17,6 +17,37 @@ router.get('/printers', async (req, res) => {
   }
 });
 
+// Маршрут для отримання принтера за замовчуванням
+router.get('/get-default-printer', (req, res) => {
+  // Читаємо існуючий файл config.json
+  fs.readFile(configPath, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error reading config file' });
+    }
+
+    // Парсимо існуючий JSON
+    let config;
+    try {
+      config = JSON.parse(data);
+    } catch (err) {
+      return res.status(500).json({ error: 'Error parsing config file' });
+    }
+
+    // Повертаємо потрібні дані з config.json
+    if (config && config.user && config.user.printers && config.user.printers.defaultLabel) {
+      res.json({
+        user: {
+          printers: {
+            defaultLabel: config.user.printers.defaultLabel
+          }
+        }
+      });
+    } else {
+      res.status(404).json({ message: 'Default printer not found in config' });
+    }
+  });
+});
+
 // Маршрут для оновлення імені принтера у файлі config.json
 router.post('/update-printer', (req, res) => {
   const newPrinterName = req.body.printerName;

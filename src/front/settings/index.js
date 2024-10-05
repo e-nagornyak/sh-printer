@@ -1,87 +1,55 @@
-const express = require('express');
-const printer = require('pdf-to-printer');
-const fs = require('fs');
-const path = require('path');
-const router = express.Router();
+document.addEventListener('DOMContentLoaded', function () {
+  const backButton = document.getElementById('settings_back');
 
-// Шлях до конфігураційного файлу
-const configPath = path.join(__dirname, '..', 'config.json');
-
-// Маршрут для отримання списку принтерів
-router.get('/printers', async (req, res) => {
-  try {
-    const printersList = await printer.getPrinters();
-    res.json({ printers: printersList });
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching printers', error: error.message });
-  }
-});
-
-// Маршрут для отримання принтера за замовчуванням
-router.get('/get-default-printer', (req, res) => {
-  // Читаємо існуючий файл config.json
-  fs.readFile(configPath, 'utf8', (err, data) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error reading config file' });
-    }
-
-    // Парсимо існуючий JSON
-    let config;
-    try {
-      config = JSON.parse(data);
-    } catch (err) {
-      return res.status(500).json({ error: 'Error parsing config file' });
-    }
-
-    // Повертаємо потрібні дані з config.json
-    if (config && config.user && config.user.printers && config.user.printers.defaultLabel) {
-      res.json({
-        user: {
-          printers: {
-            defaultLabel: config.user.printers.defaultLabel
-          }
-        }
-      });
-    } else {
-      res.status(404).json({ message: 'Default printer not found in config' });
-    }
+  backButton.addEventListener('click', function () {
+    window.location.href = '../index.html';
   });
-});
 
-// Маршрут для оновлення імені принтера у файлі config.json
-router.post('/update-printer', (req, res) => {
-  const newPrinterName = req.body.printerName;
-
-  if (!newPrinterName) {
-    return res.status(400).json({ error: 'Printer name is required' });
-  }
-
-  // Читаємо існуючий файл config.json
-  fs.readFile(configPath, 'utf8', (err, data) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error reading config file' });
-    }
-
-    // Парсимо існуючий JSON
-    let config;
-    try {
-      config = JSON.parse(data);
-    } catch (err) {
-      return res.status(500).json({ error: 'Error parsing config file' });
-    }
-
-    // Оновлюємо значення printerName
-    config.user.printers.defaultLabel = newPrinterName;
-
-    // Записуємо нові дані в config.json
-    fs.writeFile(configPath, JSON.stringify(config, null, 2), (err) => {
-      if (err) {
-        return res.status(500).json({ error: 'Error writing config file' });
+  // Запит на отримання списку принтерів з сервера
+  fetch('http://localhost:4000/api/printers')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
+      return response.json(); // Парсимо JSON-відповідь
+    })
+    .then(data => {
+      console.log(data); // Виведемо отримані дані в консоль
+      const printersList = document.getElementById('printers_list'); // наприклад, ul
 
-      res.json({ message: 'Printer name updated successfully', config });
+      data.printers.forEach(printer => {
+        const listItem = document.createElement('li');
+        listItem.textContent = printer.name; // або будь-яка інша інформація про принтер
+        printersList.appendChild(listItem);
+
+        // Додаємо обробник подій для зміни printerName у config.json
+        listItem.addEventListener('click', () => {
+          // Робимо POST або PUT запит для зміни printerName
+          fetch('http://localhost:4000/api/update-printer', {
+            method: 'POST', // Або PUT, залежно від того, як це обробляється на сервері
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              printerName: printer.name // Відправляємо вибрану назву принтера
+            })
+          })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return response.json();
+            })
+            .then(result => {
+              console.log('Printer name updated:', result);
+            })
+            .catch(error => {
+              console.error('There was a problem with the fetch operation:', error);
+            });
+        });
+      });
+    })
+    .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
     });
-  });
 });
-
-module.exports = router;
