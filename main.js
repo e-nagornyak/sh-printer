@@ -33,6 +33,7 @@ app.whenReady().then(() => {
     width: 800,
     height: 600,
     webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
       contextIsolation: false,
       enableRemoteModule: true,
@@ -44,8 +45,11 @@ app.whenReady().then(() => {
   });
 
   // Завантажуємо головну сторінку (index.html)
-  const startUrl = path.join(__dirname, 'src', 'front', 'index.html');
-  mainWindow.loadURL(`file://${startUrl}`);
+  const startURL = true
+    ? 'http://localhost:3000'  // URL Vite dev server
+    : `file://${path.join(__dirname, 'dist', 'index.html')}`; // у продакшні білд
+
+  mainWindow.loadURL(startURL);
 
   // Створюємо іконку трею
   tray = new Tray(path.join(__dirname, 'icon.jpg'));

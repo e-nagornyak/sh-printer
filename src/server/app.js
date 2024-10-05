@@ -7,6 +7,8 @@ const logsRouter = require('./routes/logs');
 
 const app = express();
 
+app.use(express.json())
+
 app.use('/api', configRouter);
 app.use('/', indexRouter);
 app.use('/api', logsRouter);
