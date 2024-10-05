@@ -5,6 +5,12 @@
     min-width: 30vw;
 }
 
+.settings_header {
+    display: flex;
+    align-content: center;
+    gap: 10px;
+}
+
 h1 {
     margin-top: 0;
 }
