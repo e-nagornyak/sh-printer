@@ -40,7 +40,7 @@ router.post('/update-printer', (req, res) => {
     }
 
     // Оновлюємо значення printerName
-    config.user.printerName = newPrinterName;
+    config.user.printers.defaultLabel = newPrinterName;
 
     // Записуємо нові дані в config.json
     fs.writeFile(configPath, JSON.stringify(config, null, 2), (err) => {

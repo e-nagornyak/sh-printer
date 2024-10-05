@@ -54,7 +54,7 @@ const startWebSocketClient = () => {
         logger.info(`File downloaded successfully: ${filePath}`);
 
         const options = {
-          printer: config.user.printerName,
+          printer: config.user.printers.defaultLabel,
           scale: 'noscale',
           paperSize: '6',
         };
