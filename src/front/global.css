@@ -18,42 +18,127 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    color:white;
+    color: white;
 }
-#text{
+
+#text {
     height: 20px;
 }
 
 .card {
+    position: relative;
     background-color: #232325;
     margin: 0;
     padding: 20px;
-    width: 50vw;
+    width: 75vw;
     min-height: 30vh;
+
+    border: 1px solid rgba(137, 137, 145, 0.44);
+    border-radius: 15px;
+
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), /* Ближча тінь */ 0 8px 12px rgba(0, 0, 0, 0.2), /* Дальша тінь */ 0 12px 20px rgba(0, 0, 0, 0.1); /* Ще дальша тінь */
+
+    transition: all 0.3s ease-in-out;
 }
 
+.card:hover {
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4), /* Більш насичена ближча тінь */ 0 12px 18px rgba(0, 0, 0, 0.3), /* Тінь стає сильнішою */ 0 16px 24px rgba(0, 0, 0, 0.2); /* Ще більше посилення тіні */
+}
 
-
-/*Setup the blinking sidebar*/
-div.container > h1:after{
+div.container > h1:after {
     content: "";
-    /*The width is the actual sidebar thickness.*/
     width: 2px;
-    /*The height fits to the text*/
     height: 100%;
     background-color: black;
-    /*Position the sidebar at the right of the text*/
     position: absolute;
     right: 0;
     top: 0;
-    /*Apply the blinkking animation looping in 2 steps: visible -> hidden.*/
     animation: blink 1s infinite steps(2, start);
 }
 
 /*Create the blinking animation by simply hide the element.*/
 @keyframes blink {
-    to{
+    to {
         visibility: hidden;
     }
 
+}
+
+.button {
+    padding: 24px;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #fff;
+    background-color: #000;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+/* Ефект при наведенні (hover) */
+.button:hover {
+    background-color: #222;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
+}
+
+/* Ефект при натисканні (active) */
+.button:active {
+    background-color: #111;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transform: translateY(2px);
+}
+
+/* Стиль для кнопки 'Back' */
+#back_button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    background-color: #000;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+#back_button:hover {
+    background-color: #222;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
+}
+
+#back_button:active {
+    background-color: #111;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transform: translateY(2px);
+}
+
+.loader {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #787b7e;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    display: none;
+}
+
+/* Анімація обертання */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }

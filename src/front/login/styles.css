@@ -1,0 +1,84 @@
+/* Основний контейнер для сторінки логіну */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    min-width: 30vw;
+    padding: 20px;
+    background-color: #232325;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+/* Стиль для заголовка налаштувань */
+.settings_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #333;
+}
+
+.settings_header h1 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+/* Стиль для лейблу */
+.login-container label {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #ddd;
+}
+
+/* Стиль для input */
+#access_token {
+    padding: 1rem;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #333;
+    border: 1px solid #444;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    outline: none;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#access_token:hover {
+    background-color: #444;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+#access_token:focus {
+    background-color: #555;
+    border-color: #a7afb7;
+    box-shadow: 0 0 6px rgba(168, 173, 178, 0.5);
+}
+
+/* Стиль для кнопки 'Save' */
+#save_button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    background-color: #000;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+#save_button:hover {
+    background-color: #222;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
+}
+
+#save_button:active {
+    background-color: #111;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transform: translateY(2px);
+}

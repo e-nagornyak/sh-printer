@@ -1,11 +1,26 @@
 document.addEventListener('DOMContentLoaded', function () {
-  const backButton = document.getElementById('settings_back');
+  const backButton = document.getElementById('back_button');
+  const loader = document.getElementById('loader');
+  const printersList = document.getElementById('printers_list');
+
+  // Показати лоадер
+  function showLoader() {
+    loader.style.display = 'block';
+    printersList.style.display = 'none'; // Приховуємо список принтерів поки триває запит
+  }
+
+  // Приховати лоадер
+  function hideLoader() {
+    loader.style.display = 'none';
+    printersList.style.display = 'block'; // Показуємо список після завершення запиту
+  }
 
   backButton.addEventListener('click', function () {
     window.location.href = '../index.html';
   });
 
   // Запит на отримання списку принтерів з сервера
+  showLoader(); // Показуємо лоадер перед початком запиту
   fetch('http://localhost:4000/api/printers')
     .then(response => {
       if (!response.ok) {
@@ -15,8 +30,6 @@ document.addEventListener('DOMContentLoaded', function () {
     })
     .then(data => {
       console.log(data); // Виведемо отримані дані в консоль
-      const printersList = document.getElementById('printers_list'); // припускаємо, що це <select>
-
       data.printers.forEach(printer => {
         const option = document.createElement('option');
         option.value = printer.name; // або інший унікальний ідентифікатор
@@ -51,8 +64,12 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('There was a problem with the fetch operation:', error);
           });
       });
+
+
     })
     .catch(error => {
       console.error('There was a problem with the fetch operation:', error);
-    });
+    }).finally(() => {
+    hideLoader(); // Приховуємо лоадер після завершення запиту
+  })
 });

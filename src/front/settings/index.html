@@ -9,18 +9,31 @@
 </head>
 <body>
 <div class="card settings-container">
-	<div class="settings_header">
-		<button id="settings_back">Back</button>
-		<h1>Settings</h1>
-	</div>
+<div class="settings_header">
+	<button id="back_button">Back</button>
+	<h1>Settings</h1>
+</div>
+<div class="loader" id="loader"></div>
+<!-- Загальний заголовок для списків принтерів -->
+<h2 class="subtitle">Default Printers</h2>
+
+<!-- Список принтерів для етикеток -->
 <div>
-	<label for="printers_list">Default printer for the label</label>
-	<select id="printers_list">
-		<!-- Опції будуть додані тут динамічно -->
+	<label for="printers_list_label">Label Printer</label>
+	<select id="printers_list_label">
+		<!-- Опції будуть додані динамічно -->
 	</select>
 </div>
+
+<!-- Список принтерів для фактур -->
+<div>
+	<label for="printers_list_factura">Factura Printer</label>
+	<select id="printers_list_factura">
+		<!-- Опції будуть додані динамічно -->
+	</select>
+</div>
+
 </div>
 <script src="index.js"></script>
-
 </body>
 </html>
