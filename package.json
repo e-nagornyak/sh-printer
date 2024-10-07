@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder --win --x64",
+    "build": "electron-builder",
     "postinstall": "electron-builder install-app-deps"
   },
   "devDependencies": {
@@ -24,8 +24,8 @@
   },
   "build": {
     "appId": "com.example.printerapp",
-    "productName": "Printer App",
-    "icon": "build/icons/icon",
+    "productName": "Printer",
+    "icon": "src/icon.ico",
     "files": [
       "src/**/*",
       "main.js",
@@ -42,15 +42,15 @@
     ],
     "mac": {
       "target": "dmg",
-      "icon": "build/icons/icon.icns"
+      "icon": "src/icon.icns"
     },
     "win": {
       "target": "nsis",
-      "icon": "build/icons/icon.ico"
+      "icon": "src/icon.ico"
     },
     "linux": {
       "target": "AppImage",
-      "icon": "build/icons"
+      "icon": "src/icons"
     }
   }
 }

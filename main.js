@@ -10,7 +10,7 @@ app.isQuitting = false; // Global flag to handle quitting
 
 // Налаштування автозапуску
 const autoLauncher = new AutoLaunch({
-  name: 'My Printer App',
+  name: 'Sh. Printer',
   path: app.getPath('exe'), // Шлях до виконуваного файлу додатка,
   mac: false,
   isHidden: true
@@ -36,9 +36,11 @@ app.whenReady().then(() => {
       nodeIntegration: true,
       contextIsolation: false,
       enableRemoteModule: true,
-      devTools: true
+      devTools: false,
+      
     },
-    icon: path.join(__dirname, 'icon.jpg'), // Specify the path to your icon here
+     autoHideMenuBar: true,
+     icon: path.join(__dirname, 'src','icon.jpg'), // Specify the path to your icon here
     // autoHideMenuBar: true, // Ця опція приховує верхню панель
     // frame: true, // Це залишить рамку вікна (кнопки мінімізації/закриття)
   });
@@ -48,7 +50,7 @@ app.whenReady().then(() => {
   mainWindow.loadURL(`file://${startUrl}`);
 
   // Створюємо іконку трею
-  tray = new Tray(path.join(__dirname, 'icon.jpg'));
+   tray = new Tray(path.join(__dirname, 'src', 'icon.jpg'));
 
   // Додаємо контекстне меню до іконки трею
   const contextMenu = Menu.buildFromTemplate([
@@ -78,7 +80,7 @@ app.whenReady().then(() => {
     },
   ]);
 
-  tray.setToolTip('My Printer App');
+  tray.setToolTip('Sh. Printer');
   tray.setContextMenu(contextMenu);
 
   // Відображаємо вікно при кліку на іконку трею
